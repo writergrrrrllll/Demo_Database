@@ -1,0 +1,969 @@
+CREATE DATABASE SMHA; 
+USE SMHA;
+CREATE TABLE LOCATION(
+LOCAT_ID VARCHAR(5) PRIMARY KEY,
+LOCAT_NAME VARCHAR(25),
+LOCAT_ADDR1 VARCHAR(25) NOT NULL,
+LOCAT_ADDR2 VARCHAR(25) NOT NULL,
+LOCAT_CITY VARCHAR(25) NOT NULL,
+LOCAT_PROV_STATE VARCHAR(20) NOT NULL,
+LOCAT_ZIP VARCHAR(5) NOT NULL,
+LOCAT_PHONE VARCHAR(10) NOT NULL,
+LOCAT_EMAIL VARCHAR(35));
+USE SMHA;
+CREATE TABLE TEAM(
+TEAM_ID VARCHAR(5) PRIMARY KEY,
+TEAM_NAME VARCHAR(20),
+TEAM_TYPE VARCHAR(1) NOT NULL,
+TEAM_RANK INTEGER(3));
+USE SMHA;
+CREATE TABLE PERSON(
+PERSON_ID VARCHAR(13) PRIMARY KEY,
+PERSON_LNAME VARCHAR(20) NOT NULL,
+PERSON_FNAME VARCHAR(20) NOT NULL,
+PERSON_DOB DATE NOT NULL,
+PERSON_PHONE VARCHAR(10) NOT NULL,
+PERSON_ADDR1 VARCHAR(25) NOT NULL,
+PERSON_ADDR2 VARCHAR(25) NOT NULL,
+PERSON_CITY VARCHAR(25) NOT NULL,
+PERSON_PROV_STA VARCHAR(20) NOT NULL,
+PERSON_ZIP VARCHAR(5) NOT NULL,
+PERSON_IS_PARENT VARCHAR(1) NOT NULL,
+PERSON_IS_PLAYER VARCHAR(1) NOT NULL,
+PERSON_IS_LEAGUEO VARCHAR(1) NOT NULL,
+PERSON_IS_TEAMO VARCHAR(1) NOT NULL);
+USE SMHA;
+CREATE TABLE PLAYER(
+PERSON_ID VARCHAR(13) PRIMARY KEY,
+PLAYER_RECREA VARCHAR(1) NOT NULL,
+PLAYER_COMPET VARCHAR(1) NOT NULL,
+PLAYER_IS_SKATER VARCHAR(1) NOT NULL,
+PLAYER_IS_GOALIE VARCHAR(1) NOT NULL,
+PLAYER_RANK VARCHAR(5),
+FOREIGN KEY (PERSON_ID) REFERENCES PERSON (PERSON_ID)
+);
+USE SMHA;
+CREATE TABLE TEAM_OFFICIAL(
+PERSON_ID VARCHAR(13) PRIMARY KEY,
+TEAM_ID VARCHAR(5) NOT NULL,
+OFFICIAL_IS_HCOACH VARCHAR(1) NOT NULL,
+OFFICIAL_IS_SAFETY VARCHAR(1) NOT NULL,
+OFFICIAL_IS_ACOACH VARCHAR(1) NOT NULL,
+OFFICIAL_IS_MANAGER VARCHAR(1) NOT NULL,
+FOREIGN KEY (PERSON_ID) REFERENCES PERSON (PERSON_ID),
+FOREIGN KEY (TEAM_ID) REFERENCES TEAM (TEAM_ID)
+);
+USE SMHA;
+CREATE TABLE PARENT(
+PERSON_ID VARCHAR(13) PRIMARY KEY,
+PARENT_EMAIL VARCHAR(35) NOT NULL,
+FOREIGN KEY (PERSON_ID) REFERENCES PERSON (PERSON_ID)
+);
+CREATE TABLE LEAGUE_OFFICIAL(
+PERSON_ID VARCHAR(13) PRIMARY KEY,
+LEAGUE_IS_REF VARCHAR(1) NOT NULL,
+LEAGUE_IS_LINE VARCHAR(1) NOT NULL,
+FOREIGN KEY (PERSON_ID) REFERENCES PERSON (PERSON_ID)
+);
+CREATE TABLE RELATIONSHIP(
+RELAT_ID INTEGER AUTO_INCREMENT PRIMARY KEY,
+PARENT_ID VARCHAR(13) NOT NULL,
+PLAYER_ID VARCHAR(13) NOT NULL,
+FOREIGN KEY (PARENT_ID) REFERENCES PARENT (PERSON_ID),
+FOREIGN KEY (PLAYER_ID) REFERENCES PLAYER (PERSON_ID)
+);
+CREATE TABLE TEAM_PLAYER(
+TEAM_PLAY_ID INTEGER AUTO_INCREMENT PRIMARY KEY,
+TEAM_ID VARCHAR(5) NOT NULL,
+PLAYER_ID VARCHAR(13) NOT NULL,
+TEAM_PLAY_START DATE NOT NULL,
+TEAM_PLAY_END DATE,
+TEAM_PLAY_JERSEY VARCHAR(2) NOT NULL,
+TEAM_PLAY_TYPE VARCHAR(7) NOT NULL,
+FOREIGN KEY (PLAYER_ID) REFERENCES PLAYER (PERSON_ID),
+FOREIGN KEY (TEAM_ID) REFERENCES TEAM (TEAM_ID)
+);
+CREATE TABLE GAME(
+GAME_ID INTEGER AUTO_INCREMENT PRIMARY KEY,
+GAME_DATE DATE NOT NULL,
+REF_ID VARCHAR(13) NOT NULL,
+LINE_ID1 VARCHAR(13) NOT NULL,
+LINE_ID2 VARCHAR(13),
+LOCAT_ID VARCHAR(5) NOT NULL,
+TEAM1_ID VARCHAR(5) NOT NULL,
+GAME_T1SCORE INTEGER,
+TEAM2_ID VARCHAR(5) NOT NULL,
+GAME_T2SCORE INTEGER,
+FOREIGN KEY (TEAM1_ID) REFERENCES TEAM (TEAM_ID),
+FOREIGN KEY (TEAM2_ID) REFERENCES TEAM (TEAM_ID),
+FOREIGN KEY (REF_ID) REFERENCES LEAGUE_OFFICIAL (PERSON_ID),
+FOREIGN KEY (LINE_ID1) REFERENCES LEAGUE_OFFICIAL (PERSON_ID),
+FOREIGN KEY (LINE_ID2) REFERENCES LEAGUE_OFFICIAL (PERSON_ID),
+FOREIGN KEY (LOCAT_ID) REFERENCES LOCATION (LOCAT_ID)
+);
+USE SMHA;
+INSERT person VALUES ('1400003355753', 'Cohen', 'Megan', '2011-10-08','2794561245', '5421 Shady Av.','',
+'Sacramento', 'CA', '94230', 'N','Y', 'N', 'N');
+INSERT person VALUES ( '1400000001754', 'Huska', 'Adam', '2012-04-20', '2794561238', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097213', 'Lackey', 'Cheryl', '2011-10-09', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097343', 'Wall', 'Albert', '2012-07-04', '2794561240', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000104996', 'Ringer', 'Anne', '2011-03-15', '2794561241',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000611241', 'DeFrance', 'Michel', '2012-05-16', '2794561242',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003166966', 'Panteley', 'Sylvia', '2011-05-06', '2794561243',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003166967', 'McBadden', 'Heather', '2011-08-15', '2794561244',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003166992', 'Stringer', 'Dirk', '2011-06-24', '2794561245', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003355754', 'Raddysh', 'Dirk', '2011-10-15', '2794561246', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001733', 'Clinton', 'Bill', '2011-01-31', '2794561237',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001755', 'Clinton', 'Hillary', '2012-04-20', '2794561238',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097214', 'Bush', 'George', '2011-10-09', '2794561239',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097344', 'Trudeau', 'Justin', '2012-07-04', '2794561240',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000104997', 'Brar', 'Amandeep', '2011-03-15', '2794561241', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000611242', 'Singh', 'Jagmeet', '2012-05-16', '2794561242', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1401003166966', 'Anita', 'Anand', '2011-05-06', '2794561243', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1420003166967', 'Amos', 'Willie', '2011-08-15', '2794561244', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003166993', 'Arya', 'Chandra', '2011-06-24', '2794561245', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400703355754', 'Bendayan', 'Rachel', '2011-10-15', '2794561246', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001734', 'Bains', 'Navdeep', '2011-01-31', '2794561237', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001756', 'Battiste', 'Jaime', '2012-04-20', '2794561238', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097215', 'Bennett', 'Carolyn', '2011-10-09', '2794561239',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097345', 'Bittle', 'Chris', '2012-07-04', '2794561240', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000104998', 'Chagger', 'Bardish', '2011-03-15', '2794561241',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000611243', 'Gonzalez', 'Juan', '2012-05-16', '2794561242',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400903166966', 'Filos', 'Rita', '2011-05-06', '2794561243', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400603166967', 'Carr', 'Jim', '2011-08-15', '2794561244',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003166994', 'Baker', 'Yvan', '2011-06-24', '2794561245', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003355755', 'Leung', 'Jason', '2011-10-15', '2794561246', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001736', 'Zhao', 'Ian', '2011-01-31', '2794561237', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001757', 'Duncan', 'Peter', '2012-04-20', '2794561238',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097216', 'Duguid', 'Terry', '2011-10-09', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097346', 'Easter', 'Wayne', '2012-07-04',
+'2794561240', '6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000104999', 'Fergus', 'Greg', '2011-01-31',
+'2794561241', '6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000611244', 'Fisher', 'Darren', '2012-04-20', '2794561242', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1404003166966', 'Fortier', 'Mona', '2011-10-09', '2794561243',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003866967', 'Fraser', 'Sean', '2012-07-04',
+'2794561244', '6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003166995', 'Garneau', 'Marc', '2011-03-15',
+'2794561237', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003355756', 'Fry', 'Hedy', '2012-05-16',
+'2794561238', '6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001737', 'Finnigan', 'Pat', '2011-05-06', '2794561239',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001758', 'Housefather', 'Anthony', '2011-08-15', '2794561240',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097217', 'Iacono', 'Angelo', '2011-06-24', '2794561241',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097347', 'Khalid', 'Iqra', '2011-10-15', '2794561242',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000104100', 'Jowhari', 'Majid', '2011-01-31', '2794561243',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000611245', 'Lametti', 'David', '2012-04-20', '2794561244',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1450003166966', 'Lamoureux', 'Kevin', '2011-10-09', '2794561245', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1409603166967', 'Dominic', 'LeBlanc', '2012-07-04', '2794561246',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003166996', 'Lightbound', 'Joel', '2011-03-15', '2794561237', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400003355757', 'Louis', 'Tim', '2012-05-16', '2794561238',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001738', 'Long', 'Wayne', '2011-05-06', '2794561239', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000001759', 'MacAulay', 'Lawrence', '2011-08-15', '2794561240',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097218', 'MacKinnon', 'Steven', '2011-01-31', '2794561241',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000097348', 'May', 'Bryan', '2012-04-20', '2794561242',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000104101', 'McDonald', 'Ken', '2011-10-09',
+'2794561243', '6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400000611246', 'McKinnon', 'Ron', '2012-07-04',
+'2794561244', '6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1400923166966', 'McKenna', 'Catherine', '2011-03-15', '2794561245',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1480003166967', 'McLeod', 'Micheal', '2012-05-16', '2794561246',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1470003166997', 'Maloney', 'James', '2011-05-06', '2794561237',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1460003355758', 'Miller', 'Marc', '2011-08-15', '2794561238',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1450000001739', 'Murray', 'Joyce', '2011-06-24', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1440000001760', 'Oliphant', 'Robert', '2011-10-15', '2794561240',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1430000097219', 'Regan', 'Seamus', '2011-01-31', '2794561241',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1420000097349', 'Robillard', 'Yves', '2012-04-20', '2794561242', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1410000104102', 'Rodriguez', 'Pablo', '2011-10-09', '2794561243', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1470000611247', 'Rogers', 'Churence', '2012-07-04', '2794561244',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1440003166966', 'Rota', 'Anthony', '2011-03-15', '2794561245', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1484203166967', 'Saini', 'Raj', '2012-05-16', '2794561246', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1475303166998', 'Samson', 'Darrell', '2011-05-06', '2794561237',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1406403355759', 'Sarai', 'Randeep', '2011-08-15', '2794561238', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1407500001740', 'Sajjan', 'Harjit', '2011-06-24', '2794561239', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1433400001761', 'Sheehan', 'Terry', '2011-10-15', '2794561240',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1405500097220', 'Sidhu', 'Maninder', '2011-01-31', '2794561241',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1406600097350', 'Sikand', 'Gagan', '2012-04-20', '2794561242',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1408800104103', 'Schiefke', 'Peter', '2011-10-09', '2794561243', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1406400611248', 'Turnbull', 'Ryan', '2012-07-04', '2794561244',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1402103166966', 'Vaughan', 'Adam', '2011-03-15', '2794561237',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1443003166967', 'Virani', 'Arif', '2012-05-16', '2794561238', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1461003166999', 'Weiler', 'Patrick', '2011-05-06', '2794561239', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1408903355760', 'Van Bynen', 'Tony', '2011-08-15', '2794561240', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1409400001741', 'van Koeverden','Adam', '2011-06-24', '2794561241',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1404900001762', 'McGuinty', 'David', '2011-10-15', '2794561242', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1405600097221', 'McCrimmon', 'Alex', '2011-01-31', '2794561243',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1407300097351', 'Smith', 'John', '2012-04-20', '2794561237', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'Y', 'N', 'N');
+INSERT person VALUES ( '1405800104104', 'Coach1', 'Coach1', '1972-04-20', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1409200611249', 'Coach2', 'Coach2', '1972-04-20', '2794561240',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500003166966', 'Coach3', 'Coach3', '1972-04-20', '2794561241',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500003166967', 'Coach4', 'Coach4', '1972-04-20', '2794561242',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500003166911', 'Coach5', 'Coach5', '1972-04-20', '2794561243',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500003355761', 'Manager1', 'Manager1', '1972-04-20', '2794561244',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500000001742', 'Manager2', 'Manager2', '1972-04-20', '2794561237',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500000001763', 'Manager3', 'Manager3', '1972-04-20', '2794561238',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500000097222', 'Manager4' , 'Manager4', '1972-04-20',
+'2794561239', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500000097352', 'Manager5' , 'Manager5', '1972-04-20', '2794561240',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500000104105', 'Assistant1', 'Assistant1', '1972-04-20', '2794561241', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500000611250', 'Assistant2', 'Assistant2', '1972-04-20', '2794561242', '6223
+Bateman St.', ' 2', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500603166966', 'Assistant3', 'Assistant3', '1972-04-20', '2794561243', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500703166967', 'Assistant4', 'Assistant4', '1972-04-20', '2794561242', '6223
+Bateman St.', '1', 'Sacramento', ' CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( '1500803166968', 'Assistant5', 'Assistant5', '1972-04-20', '2794561237', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'N', 'N', 'Y');
+INSERT person VALUES ( 'Official 1', 'Official 1' , 'Official 1', '1972-04-20', '2794561239', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Official 2', 'Offical 2' , 'Offical 2' , '1972-04-20', '2794561240', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Official 3' , 'Offical 3' , 'Offical 3' , '1972-04-20', '2794561241', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Official 4', 'Official 4' , 'Official 4', '1972-04-20', '2794561242', '6223
+Bateman St.', '1', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Official 5', 'Official 5' , 'Official 5', '1972-04-20', '2794561243', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Official 6', 'Official 6', 'Official 6', '1972-04-20', '2794561244', '6223
+Bateman St.', '3', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'P1', 'Parent1', 'Parent1', '1972-04-20', '2794561237',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P2', 'Parent2', 'Parent2', '1972-04-20', '2794561238',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P3', 'Parent3', 'Parent3', '1972-04-20', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P4', 'Parent4', 'Parent4', '1972-04-20', '2794561240',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P5', 'Parent5', 'Parent5', '1972-04-20', '2794561239',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P6', 'Parent6', 'Parent6', '1972-04-20',
+'2794561240', '6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P7', 'Parent7', 'Parent7', '1972-04-20', '2794561241',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P8', 'Parent8', 'Parent8', '1972-04-20', '2794561242',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P9', 'Parent9', 'Parent9', '1972-04-20', '2794561243',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N' , 'N');
+INSERT person VALUES ( 'P10', 'Parent10', 'Parent10', '1972-04-20', '2794561244',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P11', 'Parent11', 'Parent11', '1972-04-20', '2794561237', '6223
+Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P12', 'Parent12', 'Parent12', '1972-04-20', '2794561238',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P13', 'Parent13', 'Parent13', '1972-04-20', '2794561239',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P14', 'Parent14', 'Parent14', '1972-04-20', '2794561240',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P15', 'Parent15', 'Parent15', '1972-04-20', '2794561241',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P16', 'Parent16', 'Parent16', '1972-04-20', '2794561242',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P17', 'Parent17', 'Parent17', '1972-04-20', '2794561243',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P18', 'Parent18', 'Parent18', '1972-04-20', '2794561242',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P19', 'Parent19', 'Parent19', '1972-04-20', '2794561239',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P20', 'Parent20', 'Parent20', '1972-04-20', '2794561240',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P21', 'Parent21', 'Parent21', '1972-04-20', '2794561241',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P22', 'Parent22', 'Parent22', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 1', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P23', 'Parent23', 'Parent23', '1972-04-20', '2794561243',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P24', 'Parent24', 'Parent24', '1972-04-20', '2794561244',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P25', 'Parent25', 'Parent25', '1972-04-20', '2794561237',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P26', 'Parent26', 'Parent26', '1972-04-20', '2794561238',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P27', 'Parent27', 'Parent27', '1972-04-20', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P28', 'Parent28', 'Parent28', '1972-04-20', '2794561240',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P29', 'Parent29', 'Parent29', '1972-04-20', '2794561241',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P30', 'Parent30', 'Parent30', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 2', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P31', 'Parent31', 'Parent31', '1972-04-20', '2794561243',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P32', 'Parent32', 'Parent32', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P33', 'Parent33', 'Parent33', '1972-04-20', '2794561239',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P34', 'Parent34', 'Parent34', '1972-04-20', '2794561240',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P35', 'Parent35', 'Parent35', '1972-04-20', '2794561241',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P36', 'Parent36', 'Parent36', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P37', 'Parent37', 'Parent37', '1972-04-20', '2794561243',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P38', 'Parent38', 'Parent38', '1972-04-20', '2794561244',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P39', 'Parent39', 'Parent39', '1972-04-20', '2794561237',
+'6223 Bateman St.', ' 2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P40', 'Parent40', 'Parent40', '1972-04-20', '2794561238',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P41', 'Parent41', 'Parent41', '1972-04-20', '2794561239',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P42', 'Parent42', 'Parent42', '1972-04-20', '2794561240',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P43', 'Parent43', 'Parent43', '1972-04-20', '2794561241',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P44', 'Parent44', 'Parent44', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P45', 'Parent45', 'Parent45', '1972-04-20', '2794561243',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P46', 'Parent46', 'Parent46', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P47', 'Parent47', 'Parent47', '1972-04-20', '2794561239',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P48', 'Parent48', 'Parent48', '1972-04-20', '2794561240',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P49', 'Parent49', 'Parent49', '1972-04-20', '2794561241',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P50', 'Parent50', 'Parent50', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 1', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P51', 'Parent51', 'Parent51', '1972-04-20', '2794561243',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P52', 'Parent52', 'Parent52', '1972-04-20', '2794561244',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P53', 'Parent53', 'Parent53', '1972-04-20', '2794561237',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P54', 'Parent54', 'Parent54', '1972-04-20', '2794561238',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P55', 'Parent55', 'Parent55', '1972-04-20', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P56', 'Parent56', 'Parent56', '1972-04-20', '2794561240',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P57', 'Parent57', 'Parent57', '1972-04-20', '2794561241',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P58', 'Parent58', 'Parent58', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 3', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P59', 'Parent59', 'Parent59', '1972-04-20', '2794561243',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P60', 'Parent60', 'Parent60', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 2', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P61', 'Parent61', 'Parent61', '1972-04-20', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P62', 'Parent62', 'Parent62', '1972-04-20', '2794561240',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P63', 'Parent63', 'Parent63', '1972-04-20', '2794561241',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P64', 'Parent64', 'Parent64', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 3', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P65', 'Parent65', 'Parent65', '1972-04-20', '2794561243',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P66', 'Parent66', 'Parent66', '1972-04-20', '2794561244',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P67', 'Parent67', 'Parent67', '1972-04-20', '2794561237',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P68', 'Parent68', 'Parent68', '1972-04-20', '2794561238',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P69', 'Parent69', 'Parent69', '1972-04-20', '2794561239',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P70', 'Parent70', 'Parent70', '1972-04-20', '2794561240',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P71', 'Parent71', 'Parent71', '1972-04-20', '2794561241',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P72', 'Parent72', 'Parent72', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 2', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P73', 'Parent73', 'Parent73', '1972-04-20', '2794561243',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P74', 'Parent74', 'Parent74', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 1', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P75', 'Parent75', 'Parent75', '1972-04-20', '2794561239',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P76', 'Parent76', 'Parent76', '1972-04-20', '2794561240',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P77', 'Parent77', 'Parent77', '1972-04-20', '2794561241',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P78', 'Parent78', 'Parent78', '1972-04-20', '2794561242',
+'6223 Bateman St.', ' 2', 'Sacramento', ' CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P79', 'Parent79', 'Parent79', '1972-04-20', '2794561243',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P80', 'Parent80', 'Parent80', '1972-04-20', '2794561244',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P81', 'Parent81', 'Parent81', '1972-04-20', '2794561237',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P82', 'Parent82', 'Parent82', '1972-04-20', '2794561238',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P83', 'Parent83', 'Parent83', '1972-04-20', '2794561239',
+'6223 Bateman St.', '3', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P84', 'Parent84', 'Parent84', '1972-04-20', '2794561240',
+'6223 Bateman St.', '1', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'P85', 'Parent85', 'Parent85', '1972-04-20', '2794561241',
+'6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'Y', 'N', 'N', 'N');
+INSERT person VALUES ( 'Ref1', 'Ref1', 'Ref1`', '1974-04-20',
+'2794561241', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Ref2', 'Ref2', 'Ref2`', '1974-04-20',
+'2794561241', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Ref3', 'Ref3', 'Ref3`', '1974-04-20',
+'2794561241', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Line1', 'Line1', 'Line1`', '1974-04-20',
+'2794561241', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Line2', 'Line2', 'Line2`', '1974-04-20',
+'2794561241', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Line3', 'Line3', 'Line3`', '1974-04-20',
+'2794561241', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+INSERT person VALUES ( 'Line4', 'Line4', 'Line4`', '1974-04-20',
+'2794561241', '6223 Bateman St.', '2', 'Sacramento', 'CA', '94609', 'N', 'N', 'Y', 'N');
+USE SMHA;
+INSERT location VALUES ('12345', 'Iceland Ice', '1430 Del Paso Blvd','', 'Sacramento', 'CA','95815', '9169253121',
+'info@skatesacramento.com');
+INSERT location VALUES ('23456', 'The Rink', '2900 Bradshaw Rd','', 'Sacramento', 'CA','95827', '9163632643',
+'therinksacramento@gmail.com');
+INSERT location VALUES ('45678', 'Skatetown Ice Arena', '1009 Orlando Ave','', 'Roseville', 'CA','95661',
+'9167838550', 'info@skatetown.biz');
+USE SMHA;
+INSERT team VALUES ( '00001', 'Sharks', 'C', '002');
+INSERT team VALUES ( '00002', 'Royals', 'C', '001');
+INSERT team VALUES ( '00003', 'Blues', 'R', NULL);
+INSERT team VALUES ( '00004', 'Radcals', 'R', NULL);
+INSERT team VALUES ( '00005', 'Atoms', 'R', NULL);
+USE SMHA;
+INSERT TEAM_OFFICIAL VALUES ( '1500003355761', '00001', 'N', 'N', 'N', 'y');
+INSERT TEAM_OFFICIAL VALUES ( '1500000001742', '00002', 'N', 'N', 'N', 'y');
+INSERT TEAM_OFFICIAL VALUES ( '1500000001763', '00003', 'N', 'N', 'N', 'y');
+INSERT TEAM_OFFICIAL VALUES ( '1500000097222', '00004', 'N', 'N', 'N', 'y');
+INSERT TEAM_OFFICIAL VALUES ( '1500000097352', '00005', 'N', 'N', 'N', 'y');
+INSERT TEAM_OFFICIAL VALUES ( '1405800104104', '00001', 'Y', 'N', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1409200611249', '00002', 'Y', 'N', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500003166966', '00003', 'Y', 'N', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500003166967', '00004', 'Y', 'N', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500003166911', '00005', 'Y', 'N', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500000104105', '00001', 'N', 'N', 'Y', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500000611250', '00002', 'N', 'N', 'Y', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500603166966', '00003', 'N', 'N', 'Y', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500703166967', '00004', 'N', 'N', 'Y', 'N');
+INSERT TEAM_OFFICIAL VALUES ( '1500803166968', '00005', 'N', 'N', 'Y', 'N');
+INSERT TEAM_OFFICIAL VALUES ( 'Official 1', '00001', 'N', 'Y', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( 'Official 2', '00002', 'N', 'Y', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( 'Official 3', '00003', 'N', 'Y', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( 'Official 4', '00004', 'N', 'Y', 'N', 'N');
+INSERT TEAM_OFFICIAL VALUES ( 'Official 5', '00005', 'N', 'Y', 'N', 'N');
+INSERT team_official VALUES ( 'Official 6', '00001', 'N', 'Y', 'N', 'N');
+USE SMHA;
+INSERT parent VALUES ( 'P1', 'parent1@gmail.com');
+INSERT parent VALUES ( 'P2', 'parent2@gmail.com');
+INSERT parent VALUES ( 'P3', 'parent3@gmail.com');
+INSERT parent VALUES ( 'P4', 'parent4@gmail.com');
+INSERT parent VALUES ( 'P5', 'parent5@gmail.com');
+INSERT parent VALUES ( 'P6', 'parent6@gmail.com');
+INSERT parent VALUES ( 'P7', 'parent7@gmail.com');
+INSERT parent VALUES ( 'P8', 'parent8@gmail.com');
+INSERT parent VALUES ( 'P9', 'parent9@gmail.com');
+INSERT parent VALUES ( 'P10', 'parent10@gmail.com');
+INSERT parent VALUES ( 'P11', 'parent11@gmail.com');
+INSERT parent VALUES ( 'P12', 'parent12@gmail.com');
+INSERT parent VALUES ( 'P13', 'parent13@gmail.com');
+INSERT parent VALUES ( 'P14', 'parent14@gmail.com');
+INSERT parent VALUES ( 'P15', 'parent15@gmail.com');
+INSERT parent VALUES ( 'P16', 'parent16@gmail.com');
+INSERT parent VALUES ( 'P17', 'parent17@gmail.com');
+INSERT parent VALUES ( 'P18', 'parent18@gmail.com');
+INSERT parent VALUES ( 'P19', 'parent18@gmail.com');
+INSERT parent VALUES ( 'P20', 'parent20@gmail.com');
+INSERT parent VALUES ( 'P21', 'parent21@gmail.com');
+INSERT parent VALUES ( 'P22', 'parent22@gmail.com');
+INSERT parent VALUES ( 'P23', 'parent23@gmail.com');
+INSERT parent VALUES ( 'P24', 'parent24@gmail.com');
+INSERT parent VALUES ( 'P25', 'parent25@gmail.com');
+INSERT parent VALUES ( 'P26', 'parent26@gmail.com');
+INSERT parent VALUES ( 'P27', 'parent27@gmail.com');
+INSERT parent VALUES ( 'P28', 'parent28@gmail.com');
+INSERT parent VALUES ( 'P29', 'parent29@gmail.com');
+INSERT parent VALUES ( 'P30', 'parent30@gmail.com');
+INSERT parent VALUES ( 'P31', 'parent31@gmail.com');
+INSERT parent VALUES ( 'P32', 'parent32@gmail.com');
+INSERT parent VALUES ( 'P33', 'parent33@gmail.com');
+INSERT parent VALUES ( 'P34', 'parent34@gmail.com');
+INSERT parent VALUES ( 'P35', 'parent35@gmail.com');
+INSERT parent VALUES ( 'P36', 'parent36@gmail.com');
+INSERT parent VALUES ( 'P37', 'parent37@gmail.com');
+INSERT parent VALUES ( 'P38', 'parent38@gmail.com');
+INSERT parent VALUES ( 'P39', 'parent39@gmail.com');
+INSERT parent VALUES ( 'P40', 'parent40@gmail.com');
+INSERT parent VALUES ( 'P41', 'parent41@gmail.com');
+INSERT parent VALUES ( 'P42', 'parent42@gmail.com');
+INSERT parent VALUES ( 'P43', 'parent43@gmail.com');
+INSERT parent VALUES ( 'P44', 'parent44@gmail.com');
+INSERT parent VALUES ( 'P45', 'parent45@gmail.com');
+INSERT parent VALUES ( 'P46', 'parent46@gmail.com');
+INSERT parent VALUES ( 'P47', 'parent47@gmail.com');
+INSERT parent VALUES ( 'P48', 'parent48@gmail.com');
+INSERT parent VALUES ( 'P49', 'parent49@gmail.com');
+INSERT parent VALUES ( 'P50', 'parent50@gmail.com');
+INSERT parent VALUES ( 'P51', 'parent51@gmail.com');
+INSERT parent VALUES ( 'P52', 'parent52@gmail.com');
+INSERT parent VALUES ( 'P53', 'parent53@gmail.com');
+INSERT parent VALUES ( 'P54', 'parent54@gmail.com');
+INSERT parent VALUES ( 'P55', 'parent55@gmail.com');
+INSERT parent VALUES ( 'P56', 'parent56@gmail.com');
+INSERT parent VALUES ( 'P57', 'parent57@gmail.com');
+INSERT parent VALUES ( 'P58', 'parent57@gmail.com');
+INSERT parent VALUES ( 'P59', 'parent59@gmail.com');
+INSERT parent VALUES ( 'P60', 'parent60@gmail.com');
+INSERT parent VALUES ( 'P61', 'parent61@gmail.com');
+INSERT parent VALUES ( 'P62', 'parent62@gmail.com');
+INSERT parent VALUES ( 'P63', 'parent63@gmail.com');
+INSERT parent VALUES ( 'P64', 'parent64@gmail.com');
+INSERT parent VALUES ( 'P65', 'parent65@gmail.com');
+INSERT parent VALUES ( 'P66', 'parent66@gmail.com');
+INSERT parent VALUES ( 'P67', 'parent67@gmail.com');
+INSERT parent VALUES ( 'P68', 'parent68@gmail.com');
+INSERT parent VALUES ( 'P69', 'parent69@gmail.com');
+INSERT parent VALUES ( 'P70', 'parent70@gmail.com');
+INSERT parent VALUES ( 'P71', 'parent71@gmail.com');
+INSERT parent VALUES ( 'P72', 'parent72@gmail.com');
+INSERT parent VALUES ( 'P73', 'parent73@gmail.com');
+INSERT parent VALUES ( 'P74', 'parent74@gmail.com');
+INSERT parent VALUES ( 'P75', 'parent75@gmail.com');
+INSERT parent VALUES ( 'P76', 'parent76@gmail.com');
+INSERT parent VALUES ( 'P77', 'parent77@gmail.com');
+INSERT parent VALUES ( 'P78', 'parent78@gmail.com');
+INSERT parent VALUES ( 'P79', 'parent79@gmail.com');
+INSERT parent VALUES ( 'P80', 'parent80@gmail.com');
+INSERT parent VALUES ( 'P81', 'parent81@gmail.com');
+INSERT parent VALUES ( 'P82', 'parent82@gmail.com');
+INSERT parent VALUES ( 'P83', 'parent83@gmail.com');
+INSERT parent VALUES ( 'P84', 'parent84@gmail.com');
+INSERT parent VALUES ( 'P85', 'parent58@gmail.com');
+USE SMHA;
+INSERT PLAYER VALUES ('1400003355753', 'N', 'Y', 'Y', 'N', '00001');
+INSERT PLAYER VALUES ('1400000097213', 'N', 'Y', 'Y', 'N', '00002');
+INSERT PLAYER VALUES ('1400000097343', 'N', 'Y', 'Y', 'N', '00003');
+INSERT PLAYER VALUES ('1400000104996', 'N', 'Y', 'Y', 'N', '00004');
+INSERT PLAYER VALUES ('1400000611241', 'N', 'Y', 'Y', 'N', '00005');
+INSERT PLAYER VALUES ('1400003166966', 'N', 'Y', 'Y', 'N', '00006');
+INSERT PLAYER VALUES ('1400003166967', 'N', 'Y', 'Y', 'N', '00007');
+INSERT PLAYER VALUES ('1400003166992', 'N', 'Y', 'Y', 'N', '00008');
+INSERT PLAYER VALUES ('1400003355754', 'N', 'Y', 'Y', 'N', '00009');
+INSERT PLAYER VALUES ('1400000001733', 'N', 'Y', 'Y', 'N', '00010');
+INSERT PLAYER VALUES ('1400000001755', 'N', 'Y', 'Y', 'N', '00011');
+INSERT PLAYER VALUES ('1400000097214', 'N', 'Y', 'Y', 'N', '00012');
+INSERT PLAYER VALUES ('1400000097344', 'N', 'Y', 'Y', 'N', '00013');
+INSERT PLAYER VALUES ('1400000104997', 'N', 'Y', 'Y', 'N', '00014');
+INSERT PLAYER VALUES ('1400000611242', 'N', 'Y', 'Y', 'N', '00015');
+INSERT PLAYER VALUES ('1401003166966', 'N', 'Y', 'Y', 'N', '00016');
+INSERT PLAYER VALUES ('1420003166967', 'N', 'Y', 'Y', 'N', '00017');
+INSERT PLAYER VALUES ('1400003166993', 'N', 'Y', 'Y', 'N', '00018');
+INSERT PLAYER VALUES ('1400703355754', 'N', 'Y', 'Y', 'N', '00019');
+INSERT PLAYER VALUES ('1400000001734', 'N', 'Y', 'Y', 'N', '00020');
+INSERT PLAYER VALUES ('1400000001756', 'N', 'Y', 'Y', 'N', '00021');
+INSERT PLAYER VALUES ('1400000097215', 'N', 'Y', 'Y', 'N', '00022');
+INSERT PLAYER VALUES ('1400000097345', 'N', 'Y', 'Y', 'N', '00023');
+INSERT PLAYER VALUES ('1400000104998', 'N', 'Y', 'Y', 'N', '00024');
+INSERT PLAYER VALUES ('1400000611243', 'N', 'Y', 'Y', 'N', '00025');
+INSERT PLAYER VALUES ('1400603166967', 'N', 'Y', 'Y', 'N', '00026');
+INSERT PLAYER VALUES ('1400003166994', 'N', 'Y', 'Y', 'N', '00027');
+INSERT PLAYER VALUES ('1400003355755', 'N', 'Y', 'Y', 'N', '00028');
+INSERT PLAYER VALUES ('1400000001736', 'N', 'Y', 'Y', 'N', '00029');
+INSERT PLAYER VALUES ('1400000001757', 'N', 'Y', 'Y', 'N', '00030');
+INSERT PLAYER VALUES ('1400000097216', 'N', 'Y', 'N', 'Y', '00031');
+INSERT PLAYER VALUES ('1400000097346', 'N', 'Y', 'N', 'Y', '00032');
+INSERT PLAYER VALUES ('1400000104999', 'N', 'Y', 'N', 'Y', '00033');
+INSERT PLAYER VALUES ('1400000611244', 'N', 'Y', 'N', 'Y', '00034');
+INSERT PLAYER VALUES ('1404003166966', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400003866967', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400003166995', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400003355756', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000001737', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000001758', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000097217', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000097347', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000104100', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000611245', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1450003166966', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1409603166967', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400003166996', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400003355757', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000001738', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000001759', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000097348', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000104101', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400000611246', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1400923166966', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1480003166967', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1470003166997', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1460003355758', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1450000001739', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1440000001760', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1430000097219', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1420000097349', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1410000104102', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1470000611247', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1440003166966', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1484203166967', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1475303166998', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1406403355759', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1407500001740', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1433400001761', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1405500097220', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1406600097350', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1408800104103', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1402103166966', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1443003166967', 'Y', 'N', 'Y', 'N', NULL);
+INSERT PLAYER VALUES ('1461003166999', 'Y', 'N', 'N', 'Y', NULL);
+INSERT PLAYER VALUES ('1408903355760', 'Y', 'N', 'N', 'Y', NULL);
+INSERT PLAYER VALUES ('1409400001741', 'Y', 'N', 'N', 'Y', NULL);
+INSERT PLAYER VALUES ('1404900001762', 'Y', 'N', 'N', 'Y', NULL);
+INSERT PLAYER VALUES ('1405600097221', 'Y', 'N', 'N', 'Y', NULL);
+INSERT PLAYER VALUES ('1407300097351', 'Y', 'N', 'N', 'Y', NULL);
+USE SMHA;
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P1','1400003355753');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P2','1400000097213');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P3','1400000097343');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P4','1400000104996');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P5','1400000611241');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P6','1400003166966');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P7','1400003166967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P8','1400003166992');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P9','1400003355754');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P10','1400000001733');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P11','1400000001755');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P12','1400000097214');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P13','1400000097344');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P14','1400000104997');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P15','1400000611242');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P16','1401003166966');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P17','1420003166967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P18','1400003166993');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P19','1400703355754');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P20','1400000001734');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P21','1400000001756');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P22','1400000097215');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P23','1400000097345');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P24','1400000104998');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P25','1400000611243');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P26','1400603166967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P27','1400003166994');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P28','1400003355755');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P29','1400000001736');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P30','1400000001757');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P31','1400000097216');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P32','1400000097346');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P33','1400000104999');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P34','1400000611244');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P35','1404003166966');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P36','1400003866967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P37','1400003166995');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P38','1407300097351');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P39','1405600097221');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P40','1404900001762');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P41','1409400001741');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P42','1408903355760');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P43','1461003166999');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P44','1443003166967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P45','1402103166966');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P46','1408800104103');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P47','1406600097350');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P48','1405500097220');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P49','1433400001761');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P50','1407500001740');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P51','1406403355759');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P52','1475303166998');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P53','1484203166967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P54','1440003166966');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P55','1470000611247');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P56','1410000104102');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P57','1420000097349');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P58','1430000097219');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P59','1440000001760');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P60','1450000001739');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P61','1460003355758');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P62','1470003166997');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P63','1480003166967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P64','1400923166966');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P65','1400000611246');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P66','1400000104101');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P67','1400000097348');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P68','1400000001759');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P69','1400000001738');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P70','1400003355757');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P71','1400003166996');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P72','1409603166967');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P73','1450003166966');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P74','1400000611245');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P75','1400000104100');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P76','1400000097347');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P77','1400000097217');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P78','1400000001758');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P79','1400000001737');
+INSERT relationship (PARENT_ID, PLAYER_ID) VALUES ('P80','1400003355756');
+USE SMHA;
+INSERT LEAGUE_OFFICIAL VALUES ( 'Ref1', 'Y', 'N');
+INSERT LEAGUE_OFFICIAL VALUES ( 'Ref2', 'Y', 'N');
+INSERT LEAGUE_OFFICIAL VALUES ( 'Ref3', 'Y', 'N');
+INSERT LEAGUE_OFFICIAL VALUES ( 'Line1', 'N', 'Y');
+INSERT LEAGUE_OFFICIAL VALUES ( 'Line2', 'N', 'Y');
+INSERT LEAGUE_OFFICIAL VALUES ( 'Line3', 'N', 'Y');
+INSERT LEAGUE_OFFICIAL VALUES ( 'Line4', 'N', 'Y');
+USE SMHA;
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-05', 'ref1', 'line2', 'Line4', '45678', '00003', '00004', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-05', 'ref1', 'line2', 'Line4', '45678', '00002', '00004', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-05', 'ref2', 'line4', 'Line3', '45678', '00003', '00005', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-27', 'ref2', 'Line3', 'line2', '23456', '00004', '00001', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-19', 'ref2', 'Line1', 'line2', '23456', '00002', '00001', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-22', 'ref3', 'line4', 'Line1', '23456', '00003', '00001', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-17', 'ref3', 'Line3', NULL, '12345', '00005', '00002', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-02', 'ref3', 'Line1', 'Line3', '12345', '00004', '00005', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-06', 'ref3', 'Line1', NULL, '12345', '00005', '00001', NULL, NULL);
+INSERT GAME (GAME_DATE, REF_ID, LINE_ID1, LINE_ID2, LOCAT_ID, TEAM1_ID, TEAM2_ID, GAME_T1SCORE, GAME_T2SCORE) VALUES
+('2021-04-08', 'ref1', 'line4', 'Line3', '23456', '00003', '00002', NULL, NULL);
+USE SMHA;
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400003355753', '2021-01-01', null, '12', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000097213', '2021-01-01', null, '41', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000097343', '2021-01-01', null, '53', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000104996', '2021-01-01', null, '26', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000611241', '2021-01-01', null, '76', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400003166966', '2021-01-01', null, '97', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400003166967', '2021-01-01', null, '23', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400003166992', '2021-01-01', null, '33', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400003355754', '2021-01-01', null, '88', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000001733', '2021-01-01', null, '73', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000001755', '2021-01-01', null, '66', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000097344', '2021-01-01', null, '55', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000097214', '2021-01-01', null, '39', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400000611242', '2021-01-01', null, '34', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1401003166966', '2021-01-01', null, '99', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1420003166967', '2021-01-01', null, '05', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00001',
+'1400003166993', '2021-01-01', null, '01', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400703355754', '2021-01-01', null, '12', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000001734', '2021-01-01', null, '99', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000001756', '2021-01-01', null, '87', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000097215', '2021-01-01', null, '65', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000097345', '2021-01-01', null, '43', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000104998', '2021-01-01', null, '21', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000611243', '2021-01-01', null, '12', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400603166967', '2021-01-01', null, '34', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400003166994', '2021-01-01', null, '56', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400003355755', '2021-01-01', null, '78', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000001736', '2021-01-01', null, '89', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000001757', '2021-01-01', null, '08', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000097216', '2021-01-01', null, '03', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000097346', '2021-01-01', null, '35', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000104999', '2021-01-01', null, '68', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1400000611244', '2021-01-01', null, '70', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00002',
+'1404003166966', '2021-01-01', null, '91', 'C');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400003866967', '2021-01-01', null, '65', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400003166995', '2021-01-01', null, '77', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400003355756', '2021-01-01', null, '41', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000001737', '2021-01-01', null, '54', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000001758', '2021-01-01', null, '42', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000097217', '2021-01-01', null, '99', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000097347', '2021-01-01', null, '57', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000104100', '2021-01-01', null, '76', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000611245', '2021-01-01', null, '67', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1450003166966', '2021-01-01', null, '33', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1409603166967', '2021-01-01', null, '44', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400003166996', '2021-01-01', null, '32', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400003355757', '2021-01-01', null, '31', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000001738', '2021-01-01', null, '93', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000001759', '2021-01-01', null, '84', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000097348', '2021-01-01', null, '48', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00003',
+'1400000104101', '2021-01-01', null, '56', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1400000611246', '2021-01-01', null, '65', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1400923166966', '2021-01-01', null, '77', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1480003166967', '2021-01-01', null, '51', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1470003166997', '2021-01-01', null, '07', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1460003355758', '2021-01-01', null, '09', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1450000001739', '2021-01-01', null, '89', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1440000001760', '2021-01-01', null, '22', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1430000097219', '2021-01-01', null, '25', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1420000097349', '2021-01-01', null, '52', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1410000104102', '2021-01-01', null, '88', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1470000611247', '2021-01-01', null, '19', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1440003166966', '2021-01-01', null, '78', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1484203166967', '2021-01-01', null, '94', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1475303166998', '2021-01-01', null, '45', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1406403355759', '2021-01-01', null, '46', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1407500001740', '2021-01-01', null, '82', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00004',
+'1433400001761', '2021-01-01', null, '67', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1405500097220', '2021-01-01', null, '23', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1406600097350', '2021-01-01', null, '35', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1408800104103', '2021-01-01', null, '88', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1402103166966', '2021-01-01', null, '51', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1443003166967', '2021-01-01', null, '18', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1461003166999', '2021-01-01', null, '12', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1408903355760', '2021-01-01', null, '27', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1409400001741', '2021-01-01', null, '90', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1404900001762', '2021-01-01', null, '54', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1405600097221', '2021-01-01', null, '32', 'R');
+INSERT TEAM_PLAYER (TEAM_ID, PLAYER_ID, TEAM_PLAY_START, TEAM_PLAY_END, TEAM_PLAY_JERSEY, TEAM_PLAY_TYPE) VALUES ( '00005',
+'1407300097351', '2021-01-01', null, '16', 'R');
